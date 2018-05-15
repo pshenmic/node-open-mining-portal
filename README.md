@@ -1,22 +1,12 @@
-### We are trying to reborn NOMP. Need contributors!
 -------
-# Neoscrypt algo fixed
-
--------
-### Node Open Mining Portal consists from 3 main modules:
-* Main module - https://github.com/foxer666/node-open-mining-portal
-* Stratum Pool - https://github.com/foxer666/node-stratum-pool
-* Node Multihashing libraries https://github.com/foxer666/node-multi-hashing
-
-Stratum Pool can be replaced with node-merged-pool (it's made in UNOMP)
-Adding new algos threw Node Multihashing libraries.
+### Node Open Mining Portal
 
 Current version: v1.0.11
 
 -------
 ### Install
 ```
-git clone https://github.com/foxer666/node-open-mining-portal.git pool
+git clone https://github.com/tark-industries/node-open-mining-portal.git pool
 cd pool
 npm install
 node init.js
@@ -91,13 +81,6 @@ You can see the logs of the server with ```docker logs -f nomp```, or jump into 
 |   | Algorithm | Comment|
 | ------------- | ------------- | ------------- |
 | - | __Scrypt-Jane__ | submitblock not working tested with CacheCoin, Yacoin |
-
--------
-### Notes
-#### Lyra2Z
-If you are going to test ZCoin (lyra2z) on testnet, make sure you are uncommented proper lines in transactions.js in https://github.com/foxer666/node-stratum-pool 
-
-There is a ```payment-fixes``` branch where i fixed previous blockHash problem and corrected payouts. Check it out in this and stratum server module.
 
 -------
 ### Credits
