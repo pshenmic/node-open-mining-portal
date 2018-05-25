@@ -1,10 +1,10 @@
 {
-  "name": "Bitcoin",
+  "name": "Bitcoin (TESTNET)",
   "symbol": "BTC",
   "algorithm": "sha256",
   "peerMagic": "f9beb4d9",
   "versionByte" : {
-    "P2PKH": 0,
-    "P2SH": 5
+    "P2PKH": 111,
+    "P2SH": 196
   }
 }
