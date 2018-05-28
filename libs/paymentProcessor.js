@@ -506,7 +506,7 @@ function SetupForPool(poolOptions, setupFinished) {
                     });
 
                     logger.info('Ok, going to pay from "%s" address with final amounts: %s', addressAccount, JSON.stringify(addressAmounts));
-                    daemon.cmd('sendmany', [addressAccount || '', addressAmounts], function (result) {
+                    daemon.cmd('sendmany', [addressAccount || '', addressAmounts, 1, null, Object.keys(addressAmounts)], function (result) {
                         //Check if payments failed because wallet doesn't have enough coins to pay for tx fees
                         logger.silly('result = %s', JSON.stringify(result));
                         if (result.error && result.error.code === -6) {
