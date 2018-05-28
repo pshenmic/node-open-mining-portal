@@ -220,6 +220,7 @@ function SetupForPool(poolOptions, setupFinished) {
 
                 batchRPCcommand.push(['getaccount', [poolOptions.address]]);
 
+                logger.silly('batchRPCCommand = %s', JSON.stringify(batchRPCcommand));
                 startRPCTimer();
                 daemon.batchCmd(batchRPCcommand, function (error, txDetails) {
                     endRPCTimer();
@@ -237,8 +238,12 @@ function SetupForPool(poolOptions, setupFinished) {
                             //choose addressAccount as last output of generation transaction
                             //because there may masternodes payees and pool address should be last
                             //in zcoin its tx.address
+                            logger.silly("tx = %s", JSON.stringify(tx));
                             addressAccount = tx.result || tx.address;
-                            logger.warn("Could not decrypt address from tx (no tx.result or tx.address field) %s", JSON.stringify(tx));
+                            if (!addressAccount) {
+                                logger.warn("Could not decrypt address from tx (no tx.result or tx.address field) %s", JSON.stringify(tx));
+                                addressAccount = ""
+                            }
                             return;
                         }
 
@@ -345,7 +350,7 @@ function SetupForPool(poolOptions, setupFinished) {
                     // This snippet will parse all workers and merge different workers into 1 payout address
                     allWorkerShares = allWorkerShares.map((roundShare) => {
                         let resultForRound = {};
-                        logger.debug("roundShare = %s", roundShare);
+                        logger.debug("roundShare = %s", JSON.stringify(roundShare));
 
                         Object.keys(roundShare).forEach((workerStr) => {
                             logger.debug("Iterating worker %s", workerStr);
@@ -399,6 +404,7 @@ function SetupForPool(poolOptions, setupFinished) {
                             return;
                         }
 
+                        logger.silly("round.category = %s", round.category);
                         switch (round.category) {
                             case 'kicked':
                             case 'orphan':
@@ -502,9 +508,10 @@ function SetupForPool(poolOptions, setupFinished) {
                     logger.info('Ok, going to pay from "%s" address with final amounts: %s', addressAccount, JSON.stringify(addressAmounts));
                     daemon.cmd('sendmany', [addressAccount || '', addressAmounts], function (result) {
                         //Check if payments failed because wallet doesn't have enough coins to pay for tx fees
+                        logger.silly('result = %s', JSON.stringify(result));
                         if (result.error && result.error.code === -6) {
                             var higherPercent = withholdPercent.plus(new BigNumber(0.01));
-                            logger.warn('Not enough funds to cover the tx fees for sending out payments, decreasing rewards by %s% and retrying');
+                            logger.warn('Not enough funds to cover the tx fees for sending out payments, decreasing rewards by %s% and retrying', higherPercent);
                             trySend(higherPercent);
                         }
                         else if (result.error) {
